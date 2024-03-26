@@ -31,13 +31,7 @@
 import { ref, Ref } from 'vue';
 import treeItem from '@/components/tree/treeItem.vue'
 import SvgIcon from '../../components/svgIcon/svg.vue'
-
-interface LinkTreeNode {
-  name: string;
-  link: string;
-  icon: string;
-  children: LinkTreeNode[]
-}
+import type { LinkTreeNode } from '@/types/tree'
 
 // 假设这是你的数据
 const link: Ref<LinkTreeNode[]> = ref([

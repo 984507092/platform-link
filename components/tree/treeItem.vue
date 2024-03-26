@@ -11,9 +11,10 @@
 </template>
 <script setup lang="ts">
 import SvgIcon from "@/components/svgIcon/svg.vue";
+import type { LinkTreeNode } from '@/types/tree'
 
 defineProps<{
-  node: object
+  node: LinkTreeNode
 }>()
 </script>
 <style scoped lang="scss">
