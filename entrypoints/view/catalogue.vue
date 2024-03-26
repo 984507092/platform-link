@@ -237,12 +237,6 @@ function handleJumpLink(data: LinkTreeNode): void {
       box-sizing: content-box;
       padding: 5px;
     }
-
-    .first-children:hover {
-      color: red;
-      background-color: #cccccc;
-      box-sizing: content-box;
-    }
   }
 }
 
@@ -262,9 +256,12 @@ function handleJumpLink(data: LinkTreeNode): void {
   }
 }
 
+.item-tree .first-children:hover,
 .item-tree-children .item-tree-children-child:hover {
-  color: red;
-  background-color: #cccccc;
+  color: skyblue;
+  transition: all 0.3s;
+  border-radius: 8px;
+  background-color: #cccccc0f;
   box-sizing: content-box;
 }
 </style>
