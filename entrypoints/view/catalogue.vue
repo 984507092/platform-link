@@ -26,9 +26,7 @@
   </div>
 </template>
 
-
 <script setup lang="ts">
-import { ref, Ref } from 'vue';
 import treeItem from '@/components/tree/treeItem.vue'
 import SvgIcon from '../../components/svgIcon/svg.vue'
 import type { LinkTreeNode } from '@/types/tree'

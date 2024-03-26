@@ -3,6 +3,7 @@ import vue from '@vitejs/plugin-vue';
 import { createSvgIconsPlugin } from "vite-plugin-svg-icons";
 import UnoCSS from 'unocss/vite'
 import path from "path";
+import AutoImport from 'unplugin-auto-import/vite'
 
 // See https://wxt.dev/api/config.html
 export default defineConfig({
@@ -15,6 +16,16 @@ export default defineConfig({
     plugins: [
       vue(),
       UnoCSS(),
+      AutoImport({
+        // targets to transform
+        include: [/\.[tj]sx?$/, /\.vue$/, /\.vue\?vue/, /\.md$/],
+
+        // global imports to register
+        imports: [
+          // vue auto import
+          'vue',
+        ]
+      }),
       createSvgIconsPlugin({
         // 指定目录(svg存放目录）
         iconDirs: [path.resolve(process.cwd(), "assets/svgs")],
