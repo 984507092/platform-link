@@ -3,7 +3,7 @@
     <ul class="tree">
       <li class="item-tree" v-for="item in link" :key="item.name">
         <div class="tree-title flex items-center" v-if="item.children && item.children.length > 1"
-             @click="handleJumpLink(item)">
+          @click="handleJumpLink(item)">
           <SvgIcon :name="item.icon" width="24" height="24"></SvgIcon>
           <i class="ml-2">{{ item.name }}</i>
         </div>
@@ -17,7 +17,7 @@
         <!-- 当有多个子节点时，依旧使用递归组件 -->
         <ul class="item-tree-children" v-else-if="item.children && item.children.length > 1">
           <li class="item-tree-children-child" v-for="child in item.children" :key="child.name"
-              @click="handleJumpLink(child)">
+            @click="handleJumpLink(child)">
             <tree-item :node="child"></tree-item>
           </li>
         </ul>
@@ -28,12 +28,19 @@
 
 
 <script setup lang="ts">
-import {ref} from 'vue';
+import { ref, Ref } from 'vue';
 import treeItem from '@/components/tree/treeItem.vue'
 import SvgIcon from '../../components/svgIcon/svg.vue'
 
+interface LinkTreeNode {
+  name: string;
+  link: string;
+  icon: string;
+  children: LinkTreeNode[]
+}
+
 // 假设这是你的数据
-const link = ref([
+const link: Ref<LinkTreeNode[]> = ref([
   {
     name: 'ES6',
     link: 'https://es6.ruanyifeng.com/',
@@ -196,7 +203,7 @@ const link = ref([
   },
 ]);
 
-function handleJumpLink(data: object): void {
+function handleJumpLink(data: LinkTreeNode): void {
   window.open(data.link)
 }
 </script>
@@ -268,5 +275,4 @@ function handleJumpLink(data: object): void {
   background-color: #cccccc;
   box-sizing: content-box;
 }
-
 </style>
