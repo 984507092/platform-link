@@ -1,8 +1,8 @@
 {
-  "name": "plugin-website",
+  "name": "platform-link",
   "description": "manifest.json description",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.1",
   "type": "module",
   "scripts": {
     "dev": "wxt",
