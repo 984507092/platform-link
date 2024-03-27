@@ -9,7 +9,7 @@
   </div>
 </template>
 <script lang="ts" setup>
-import catalogue from "../view/catalogue.vue"
+import catalogue from "@/entrypoints/view/catalogue.vue"
 
 const search = ref('')
 
