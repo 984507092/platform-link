@@ -1,6 +1,7 @@
-export interface LinkTreeNode {
+export interface LinkNodeType {
   name: string;
   link: string;
   icon: string;
-  children: LinkTreeNode[]
+  parentName: string | null;
+  children?: LinkNodeType[]
 }

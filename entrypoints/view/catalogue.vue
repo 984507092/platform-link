@@ -29,175 +29,46 @@
 <script setup lang="ts">
 import treeItem from '@/components/tree/treeItem.vue'
 import SvgIcon from '../../components/svgIcon/svg.vue'
-import type { LinkTreeNode } from '@/types/tree'
+import type { LinkNodeType } from '@/types/tree'
+import { flatToTree } from '@/utils'
+
+const data: LinkNodeType[] = [
+  { "name": "ES6相关", "link": "https://es6.ruanyifeng.com/", "icon": "es6", "parentName": null, "children": [] },
+  { "name": "ES6", "link": "https://es6.ruanyifeng.com/", "icon": "es6", "parentName": "ES6相关", "children": [] },
+  { "name": "Vue全套", "link": "https://cn.vuejs.org/", "icon": "vue", "parentName": null, "children": [] },
+  { "name": "Vue", "link": "https://cn.vuejs.org/", "icon": "vue", "parentName": "Vue全套", "children": [] },
+  { "name": "Vue-router", "link": "https://router.vuejs.org/installation.html", "icon": "vue", "parentName": "Vue全套", "children": [] },
+  { "name": "React全套", "link": "https://zh-hans.react.dev/", "icon": "react", "parentName": null, "children": [] },
+  { "name": "React", "link": "https://zh-hans.react.dev/", "icon": "react", "parentName": "React全套", "children": [] },
+  { "name": "React Native中文网", "link": "https://reactnative.cn/", "icon": "react", "parentName": "React全套", "children": [] },
+  { "name": "uniapp相关", "link": "https://uniapp.dcloud.net.cn/", "icon": "uniapp", "parentName": null, "children": [] },
+  { "name": "uniapp", "link": "https://uniapp.dcloud.net.cn/", "icon": "uniapp", "parentName": "uniapp相关", "children": [] },
+  { "name": "小程序", "link": "https://uniapp.dcloud.net.cn/", "icon": "miniprogram", "parentName": null, "children": [] },
+  { "name": "微信小程序", "link": "https://developers.weixin.qq.com/miniprogram/dev/framework/", "icon": "miniprogram", "parentName": "小程序", "children": [] },
+  { "name": "支付宝小程序", "link": "https://opendocs.alipay.com/mini", "icon": "miniprogram", "parentName": "小程序", "children": [] },
+  { "name": "Node", "link": "https://zh-hans.react.dev/", "icon": "nodejs", "parentName": null, "children": [] },
+  { "name": "Node 中文文档", "link": "https://zh-hans.react.dev/", "icon": "nodejs", "parentName": "Node", "children": [] },
+  { "name": "Node 英文文档", "link": "https://nodejs.org/en", "icon": "nodejs", "parentName": "Node", "children": [] },
+  { "name": "Nest", "link": "https://nestjs.com/", "icon": "nestjs", "parentName": null, "children": [] },
+  { "name": "Nest英文文档", "link": "https://nestjs.com/", "icon": "nestjs", "parentName": "Nest", "children": [] },
+  { "name": "Nest中文文档", "link": "https://www.nestjs.com.cn/", "icon": "nestjs", "parentName": "Nest", "children": [] },
+  { "name": "nuxt", "link": "https://v2.nuxt.com/", "icon": "nuxt", "parentName": null, "children": [] },
+  { "name": "nuxt英文文档", "link": "https://v2.nuxt.com/", "icon": "nuxt", "parentName": "nuxt", "children": [] },
+  { "name": "WXT相关", "link": "https://wxt.dev/", "icon": "pluginmanagement", "parentName": null, "children": [] },
+  { "name": "WXT", "link": "https://wxt.dev/", "icon": "pluginmanagement", "parentName": "WXT相关", "children": [] },
+  { "name": "MDN", "link": "https://developer.mozilla.org/zh-CN/docs/Learn", "icon": "mdnwebdocs", "parentName": null, "children": [] }
+]
 
 // 假设这是你的数据
-const link: Ref<LinkTreeNode[]> = ref([
-  {
-    name: 'ES6',
-    link: 'https://es6.ruanyifeng.com/',
-    icon: "es6",
-    children: [
-      {
-        name: 'ES6',
-        icon: "es6",
-        link: 'https://es6.ruanyifeng.com/',
-        children: []
-      },
-    ]
-  },
-  {
-    name: 'Vue全套',
-    link: 'https://cn.vuejs.org/',
-    icon: "vue",
-    children: [
-      {
-        name: 'Vue',
-        icon: "vue",
-        link: 'https://cn.vuejs.org/',
-        children: []
-      },
-      {
-        name: 'Vue-router',
-        icon: "vue",
-        link: 'https://router.vuejs.org/installation.html',
-        children: []
-      },
-    ]
-  },
-  {
-    name: 'React全套',
-    icon: "react",
-    link: 'https://zh-hans.react.dev/',
-    children: [
-      {
-        name: 'React',
-        icon: "react",
-        link: 'https://zh-hans.react.dev/',
-        children: []
-      },
-      {
-        name: 'React Native中文网',
-        icon: "react",
-        link: 'https://reactnative.cn/',
-        children: []
-      },
-    ]
-  },
-  {
-    name: 'uniapp',
-    icon: "uniapp",
-    link: 'https://uniapp.dcloud.net.cn/',
-    children: [
-      {
-        name: 'uniapp',
-        icon: "uniapp",
-        link: 'https://uniapp.dcloud.net.cn/',
-        children: []
-      },
-    ]
-  },
-  {
-    name: '小程序',
-    icon: "miniprogram",
-    link: 'https://uniapp.dcloud.net.cn/',
-    children: [
-      {
-        name: '微信小程序',
-        icon: "miniprogram",
-        link: 'https://developers.weixin.qq.com/miniprogram/dev/framework/',
-        children: []
-      },
-      {
-        name: '支付宝小程序',
-        icon: "miniprogram",
-        link: 'https://opendocs.alipay.com/mini',
-        children: []
-      },
-    ]
-  },
-  {
-    name: 'Node',
-    icon: "nodejs",
-    link: 'https://zh-hans.react.dev/',
-    children: [
-      {
-        name: 'Node 中文文档',
-        icon: "nodejs",
-        link: 'https://zh-hans.react.dev/',
-        children: []
-      },
-      {
-        name: 'Node 英文文档',
-        icon: "nodejs",
-        link: 'https://nodejs.org/en',
-        children: []
-      },
-    ]
-  },
-  {
-    name: 'Nest',
-    icon: "nestjs",
-    link: 'https://nestjs.com/',
-    children: [
-      {
-        name: 'Nest英文文档',
-        icon: "nestjs",
-        link: 'https://nestjs.com/',
-        children: []
-      },
-      {
-        name: 'Nest中文文档',
-        icon: "nestjs",
-        link: 'https://www.nestjs.com.cn/',
-        children: []
-      }
-    ]
-  },
-  {
-    name: 'nuxt',
-    icon: "nuxt",
-    link: 'https://v2.nuxt.com/',
-    children: [
-      {
-        name: 'nuxt英文文档',
-        icon: "nuxt",
-        link: 'https://v2.nuxt.com/',
-        children: []
-      }
-    ]
-  },
-  {
-    name: 'WXT',
-    icon: "pluginmanagement",
-    link: 'https://wxt.dev/',
-    children: [
-      {
-        name: 'WXT',
-        icon: "pluginmanagement",
-        link: 'https://wxt.dev/',
-        children: []
-      }
-    ]
-  },
-  {
-    name: 'MDN',
-    icon: "mdnwebdocs",
-    link: 'https://developer.mozilla.org/zh-CN/docs/Learn',
-    children: [
-      {
-        name: 'MDN',
-        icon: "mdnwebdocs",
-        link: 'https://developer.mozilla.org/zh-CN/docs/Learn',
-        children: []
-      }
-    ]
-  },
-]);
+const link: Ref<LinkNodeType[]> = ref([]);
 
-function handleJumpLink(data: LinkTreeNode): void {
+function handleJumpLink(data: LinkNodeType): void {
   window.open(data.link)
 }
+
+onMounted(() => {
+  link.value = flatToTree(data)
+})
 </script>
 
 <style scoped lang="scss">
