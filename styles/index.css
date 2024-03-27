@@ -1,2 +1,7 @@
 @import './style.css';
 @import './reset.css';
+
+* {
+    margin: 0;
+    padding: 0;
+}

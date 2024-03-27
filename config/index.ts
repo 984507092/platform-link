@@ -1,6 +1,7 @@
 import type {LinkNodeType} from '@/types/tree'
+import {flatToTree} from '@/utils'
 
-export const data: LinkNodeType[] = [
+const data: LinkNodeType[] = [
     // ES6相关
     {"name": "ES6相关", "link": "https://es6.ruanyifeng.com/", "icon": "es6", "parentName": null},
     {"name": "ES6", "link": "https://es6.ruanyifeng.com/", "icon": "es6", "parentName": "ES6相关"},
@@ -99,3 +100,6 @@ export const data: LinkNodeType[] = [
         "parentName": 'MDN相关'
     }
 ]
+
+
+export default flatToTree(data)
