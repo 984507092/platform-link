@@ -1,7 +1,7 @@
 <template>
   <div w-full h-full flex-col>
     <div class="catalogue-link" pb-32px>
-      <catalogue></catalogue>
+      <catalogue :search></catalogue>
     </div>
     <div h-40px fixed bottom-0 w-320px style="background: #333">
       <input w-full h-full class="search-input" type="text" v-model="search" />
@@ -12,6 +12,7 @@
 import catalogue from "../view/catalogue.vue"
 
 const search = ref('')
+
 </script>
 
 <style scoped>

@@ -14,6 +14,7 @@ export function flatToTree(nodes: LinkNodeType[]): LinkNodeType[] {
     if (node.parentName) {
       // 如果当前节点有父节点，将其添加到父节点的children数组中
       if (map[node.parentName]) {
+
         if (!map[node.parentName].children) {
           map[node.parentName].children = [];
         }
