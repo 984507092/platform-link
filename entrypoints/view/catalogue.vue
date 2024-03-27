@@ -33,30 +33,41 @@ import type { LinkNodeType } from '@/types/tree'
 import { flatToTree } from '@/utils'
 
 const data: LinkNodeType[] = [
+  // ES6相关
   { "name": "ES6相关", "link": "https://es6.ruanyifeng.com/", "icon": "es6", "parentName": null },
   { "name": "ES6", "link": "https://es6.ruanyifeng.com/", "icon": "es6", "parentName": "ES6相关" },
+  // Vue全套
   { "name": "Vue全套", "link": "https://cn.vuejs.org/", "icon": "vue", "parentName": null },
   { "name": "Vue", "link": "https://cn.vuejs.org/", "icon": "vue", "parentName": "Vue全套" },
   { "name": "Vue-router", "link": "https://router.vuejs.org/installation.html", "icon": "vue", "parentName": "Vue全套" },
+  // React全套
   { "name": "React全套", "link": "https://zh-hans.react.dev/", "icon": "react", "parentName": null },
   { "name": "React", "link": "https://zh-hans.react.dev/", "icon": "react", "parentName": "React全套" },
   { "name": "React Native中文网", "link": "https://reactnative.cn/", "icon": "react", "parentName": "React全套" },
+  // uniapp相关
   { "name": "uniapp相关", "link": "https://uniapp.dcloud.net.cn/", "icon": "uniapp", "parentName": null },
   { "name": "uniapp", "link": "https://uniapp.dcloud.net.cn/", "icon": "uniapp", "parentName": "uniapp相关" },
+  // 小程序
   { "name": "小程序", "link": "https://uniapp.dcloud.net.cn/", "icon": "miniprogram", "parentName": null },
   { "name": "微信小程序", "link": "https://developers.weixin.qq.com/miniprogram/dev/framework/", "icon": "miniprogram", "parentName": "小程序" },
   { "name": "支付宝小程序", "link": "https://opendocs.alipay.com/mini", "icon": "miniprogram", "parentName": "小程序" },
+  // Node
   { "name": "Node", "link": "https://zh-hans.react.dev/", "icon": "nodejs", "parentName": null },
   { "name": "Node 中文文档", "link": "https://zh-hans.react.dev/", "icon": "nodejs", "parentName": "Node" },
   { "name": "Node 英文文档", "link": "https://nodejs.org/en", "icon": "nodejs", "parentName": "Node" },
+  // Nest
   { "name": "Nest", "link": "https://nestjs.com/", "icon": "nestjs", "parentName": null },
   { "name": "Nest英文文档", "link": "https://nestjs.com/", "icon": "nestjs", "parentName": "Nest" },
   { "name": "Nest中文文档", "link": "https://www.nestjs.com.cn/", "icon": "nestjs", "parentName": "Nest" },
+  // nuxt
   { "name": "nuxt", "link": "https://v2.nuxt.com/", "icon": "nuxt", "parentName": null },
   { "name": "nuxt英文文档", "link": "https://v2.nuxt.com/", "icon": "nuxt", "parentName": "nuxt" },
+  // WXT相关
   { "name": "WXT相关", "link": "https://wxt.dev/", "icon": "pluginmanagement", "parentName": null },
   { "name": "WXT", "link": "https://wxt.dev/", "icon": "pluginmanagement", "parentName": "WXT相关" },
-  { "name": "MDN", "link": "https://developer.mozilla.org/zh-CN/docs/Learn", "icon": "mdnwebdocs", "parentName": null }
+  // MDN相关
+  { "name": "MDN相关", "link": "https://developer.mozilla.org/zh-CN/docs/Learn", "icon": "mdnwebdocs", "parentName": null },
+  { "name": "MDN", "link": "https://developer.mozilla.org/zh-CN/docs/Learn", "icon": "mdnwebdocs", "parentName": 'MDN相关' }
 ]
 
 // 假设这是你的数据
