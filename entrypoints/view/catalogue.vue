@@ -61,6 +61,10 @@ const data: LinkNodeType[] = [
   {"name": "React全套", "link": "https://zh-hans.react.dev/", "icon": "react", "parentName": null},
   {"name": "React", "link": "https://zh-hans.react.dev/", "icon": "react", "parentName": "React全套"},
   {"name": "React Native中文网", "link": "https://reactnative.cn/", "icon": "react", "parentName": "React全套"},
+  // TypeScript相关
+  {"name": "TypeScript全套", "link": "https://ts.nodejs.cn/", "icon": "typescript", "parentName": null},
+  {"name": "TypeScript", "link": "https://ts.nodejs.cn/", "icon": "typescript", "parentName": "TypeScript全套"},
+  {"name": "深入理解 TypeScript", "link": "https://jkchao.github.io/typescript-book-chinese/", "icon": "typescript", "parentName": "TypeScript全套"},
   // uniapp相关
   {"name": "uniapp相关", "link": "https://uniapp.dcloud.net.cn/", "icon": "uniapp", "parentName": null},
   {"name": "uniapp", "link": "https://uniapp.dcloud.net.cn/", "icon": "uniapp", "parentName": "uniapp相关"},
