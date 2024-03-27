@@ -30,7 +30,7 @@
 import treeItem from '@/components/tree/treeItem.vue'
 import SvgIcon from '@/components/svgIcon/svg.vue'
 import type {LinkNodeType} from '@/types/tree'
-// import {flatToTree} from '@/utils'
+import {flatToTree} from '@/utils'
 import data from "@/config"
 
 // 输入框传的参数
@@ -49,14 +49,56 @@ const link: Ref<LinkNodeType[]> = ref([]);
  */
 watch(() => props.search, (key: string) => {
   // 根据搜索关键字过滤数据，并更新link的值
-  // console.log(data,'data')
-  link.value = data.filter(book => book.name.toUpperCase().includes(key.toUpperCase()))
+  link.value = handleSearchResult(key)
   // 平滑滚动到页面顶部
   window.scrollTo({
     top: 0, // 滚动到页面顶部
     behavior: "smooth", // 使用平滑滚动方式
   })
 })
+
+// 处理搜索
+function handleSearchResult(key: string): LinkNodeType[] {
+  // 去除输入框中的空格
+  const trimmedKey = key.trim();
+
+  // 如果搜索关键字为空，则直接返回原始数据
+  if (!trimmedKey) {
+    return data;
+  }
+
+  // 进行去重
+  const filteredData = new Set<any>();
+
+  // 遍历每个项目
+  data.forEach(item => {
+    // 去除当前项目的 name 中的空格
+    const itemNameWithoutSpace = item.name.replace(/\s+/g, '');
+
+    // 检查当前项目是否匹配搜索关键字
+    if (itemNameWithoutSpace.toUpperCase().includes(trimmedKey.toUpperCase())) {
+      // 如果匹配，则将当前项目添加到结果中
+      filteredData.add(item);
+    }
+
+    // 检查子项目
+    if (item.children) {
+      // 遍历子项目
+      item.children.forEach(child => {
+        // 去除子项目的 name 中的空格
+        const childNameWithoutSpace = child.name.replace(/\s+/g, '');
+        // 检查子项目是否匹配搜索关键字
+        if (childNameWithoutSpace.toUpperCase().includes(trimmedKey.toUpperCase())) {
+          // 如果匹配，则将父项目添加到结果中
+          filteredData.add(item);
+        }
+      });
+    }
+  });
+
+  // 将 Set 转换为数组并返回
+  return Array.from(filteredData);
+}
 
 function handleJumpLink(data: LinkNodeType): void {
   window.open(data.link)
