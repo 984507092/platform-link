@@ -4,7 +4,11 @@
       <li class="item-tree" v-for="item in link" :key="item.name">
         <div class="tree-title flex items-center" v-if="item.children && item.children.length > 1"
              @click="handleJumpLink(item)">
-          <SvgIcon :name="item.icon" width="24" height="24"></SvgIcon>
+
+          <div class="transition">
+            <SvgIcon :name="item.icon" width="24" height="24"></SvgIcon>
+
+          </div>
           <i class="ml-2">{{ item.name }}</i>
         </div>
         <!-- 当只有一个子节点时，直接显示 -->
@@ -112,7 +116,7 @@ onMounted(() => {
 <style scoped lang="scss">
 .wrapper {
   width: 100%;
-  min-width: 320px;
+  min-width: 260px;
   min-height: 100vh;
   box-sizing: border-box;
 }
@@ -176,8 +180,10 @@ onMounted(() => {
 .item-tree-children .item-tree-children-child:hover {
   color: skyblue;
   transition: all 0.3s;
+  -webkit-transition:all .5s ease;
   border-radius: 8px;
   background-color: #cccccc0f;
   box-sizing: content-box;
 }
+
 </style>
