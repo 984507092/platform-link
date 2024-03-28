@@ -4,7 +4,7 @@
       <catalogue :search></catalogue>
     </div>
     <div h-40px fixed bottom-0 w-320px style="background: #333">
-      <input w-full h-full class="search-input" type="text" v-model="search" />
+      <input w-full h-full class="search-input" type="text" v-model="search"/>
     </div>
   </div>
 </template>
@@ -20,7 +20,9 @@ const search = ref('')
   font-size: 18px;
   box-sizing: border-box;
   border: 1px solid #ccc;
-  border-radius: 0!important;
+  border-radius: 0 !important;
   outline: none;
+  padding: 0 10px;
 }
+
 </style>

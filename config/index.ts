@@ -52,7 +52,7 @@ const data: LinkNodeType[] = [
     {"name": "uniapp相关", "link": "https://uniapp.dcloud.net.cn/", "icon": "uniapp", "parentName": null},
     {"name": "uniapp", "link": "https://uniapp.dcloud.net.cn/", "icon": "uniapp", "parentName": "uniapp相关"},
     // 小程序相关
-    {"name": "小程序", "link": "https://uniapp.dcloud.net.cn/", "icon": "miniprogram", "parentName": null},
+    {"name": "小程序", "link": "https://developers.weixin.qq.com/miniprogram/dev/framework/", "icon": "miniprogram", "parentName": null},
     {
         "name": "微信小程序",
         "link": "https://developers.weixin.qq.com/miniprogram/dev/framework/",
@@ -61,8 +61,8 @@ const data: LinkNodeType[] = [
     },
     {"name": "支付宝小程序", "link": "https://opendocs.alipay.com/mini", "icon": "miniprogram", "parentName": "小程序"},
     // Node相关
-    {"name": "Node", "link": "https://zh-hans.react.dev/", "icon": "nodejs", "parentName": null},
-    {"name": "Node 中文文档", "link": "https://zh-hans.react.dev/", "icon": "nodejs", "parentName": "Node"},
+    {"name": "Node", "link": "https://nodejs.org/en", "icon": "nodejs", "parentName": null},
+    {"name": "Node 中文文档", "link": "https://nodejs.cn/", "icon": "nodejs", "parentName": "Node"},
     {"name": "Node 英文文档", "link": "https://nodejs.org/en", "icon": "nodejs", "parentName": "Node"},
     {"name": "Express", "link": "https://express.nodejs.cn/", "icon": "express", "parentName": "Node"},
     {"name": "Koa", "link": "https://koa.nodejs.cn/", "icon": "koa", "parentName": "Node"},
