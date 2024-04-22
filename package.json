@@ -2,7 +2,7 @@
   "name": "platform-link",
   "description": "manifest.json description",
   "private": true,
-  "version": "1.0.3",
+  "version": "1.0.5",
   "type": "module",
   "scripts": {
     "dev": "wxt",
@@ -15,6 +15,7 @@
     "postinstall": "wxt prepare"
   },
   "dependencies": {
+    "@imengyu/vue3-context-menu": "^1.4.1",
     "vue": "^3.4.0",
     "vuedraggable": "^4.1.0"
   },

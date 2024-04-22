@@ -1,4 +1,5 @@
 export interface LinkNodeType {
+  id?: string | number;
   name: string;
   link: string;
   icon: string;

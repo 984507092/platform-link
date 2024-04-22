@@ -2,20 +2,20 @@
   <div class="wrapper">
     <ul class="tree">
       <draggable
+          :force-fallback="true"
           :list="link"
           :sort="true"
-          :force-fallback="true"
-          @start="onStart"
           @end="onEnd"
+          @start="onStart"
       >
-        <template #item="{element }">
-          <ul :class="isOpen?'is_open':''">
+        <template #item="{ element }">
+          <ul :class="isOpen?'is_open':''" @contextmenu="onContextMenu($event,element)">
             <!-- <li class="item-tree" v-for="item in link" :key="item.name">-->
             <li class="item-tree">
-              <div class="tree-title flex items-center" v-if="element.children && element.children.length > 1"
+              <div v-if="element.children && element.children.length > 1" class="tree-title flex items-center"
                    @click="handleJumpLink(element)">
                 <div class="transition">
-                  <SvgIcon :name="element.icon" width="24" height="24"></SvgIcon>
+                  <SvgIcon :name="element.icon" height="24" width="24"></SvgIcon>
                 </div>
                 <i class="ml-2">{{ element.name }}</i>
               </div>
@@ -23,19 +23,19 @@
               <!-- 当只有一个子节点时，直接显示 -->
               <div v-if="element.children && element.children.length == 1">
                 <div class="first-children items-center" @click="handleJumpLink(element.children[0])">
-                  <SvgIcon :name="element.icon" width="24" height="24"></SvgIcon>
+                  <SvgIcon :name="element.icon" height="24" width="24"></SvgIcon>
                   <i class="ml-2"> {{ element.children[0].name }}</i>
                 </div>
               </div>
 
               <!-- 当有多个子节点时，依旧使用递归组件 -->
-              <ul class="item-tree-children" v-else-if="element.children && element.children.length > 1">
+              <ul v-else-if="element.children && element.children.length > 1" class="item-tree-children">
                 <draggable
+                    :force-fallback="true"
                     :list="element.children"
                     :sort="true"
-                    :force-fallback="true"
-                    @start="onStartChild"
                     @end="onEndChild"
+                    @start="onStartChild"
                 >
                   <!-- <li class="item-tree-children-child" v-for="child in element.children" :key="child.name" @click="handleJumpLink(child)">-->
                   <template #item="{element}">
@@ -55,13 +55,14 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import treeItem from '@/components/tree/treeItem.vue'
 import SvgIcon from '@/components/svgIcon/svg.vue'
 import draggable from "vuedraggable";
 import type {LinkNodeType} from '@/types/tree'
 import data from "@/config"
-import {getItem,setItem} from "@/utils/storage";
+import {getItem, setItem} from "@/utils/storage";
+import ContextMenu from '@imengyu/vue3-context-menu'
 
 // 输入框传的参数
 const props = withDefaults(defineProps<{
@@ -146,7 +147,7 @@ const onStart = () => {
 //父级拖拽结束的事件
 const onEnd = () => {
   isOpen.value = !isOpen.value
-  setItem('link',link.value)
+  setItem('link', JSON.stringify(link.value))
   console.log('onEnd')
 };
 
@@ -156,16 +157,114 @@ const onStartChild = () => {
 }
 //子级拖拽结束的事件
 const onEndChild = () => {
-  setItem('link',link.value)
+  setItem('link', JSON.stringify(link.value))
   console.log('endChild')
 }
 
+
+// 右键新增 编辑 删除
+function onContextMenu(e: MouseEvent, data: LinkNodeType) {
+  //prevent the browser's default menu
+  e.preventDefault();
+  //show your menu
+  ContextMenu.showContextMenu({
+    x: e.x,
+    y: e.y,
+    theme: 'mac dark',
+    checked:true,
+    items: [
+      {
+        label: "新增",
+        onClick: () => {
+        let newArr = link.value.map((item) => {
+            if (item.id === data.id) {
+              let obj: LinkNodeType = {
+                id: new Date().valueOf() * Math.floor((Math.random()*10)+1),
+                name: "测试新增",
+                link: "xxx",
+                icon: "xxx",
+                parentName: "vue",
+                children:[]
+              }
+              item.children&&item.children.unshift(obj)
+              return {
+                ...item,
+                children: item.children && item.children.length > 0 ? item.children : []
+              }
+            } else {
+              return item
+            }
+          })
+          console.log(newArr,'1515')
+          link.value = newArr
+        }
+      },
+      {
+        label: "编辑",
+        onClick: () => {
+         let newArr = link.value.map((item) => {
+            if (item.id === data.id) {
+              let obj: LinkNodeType = {
+                id: new Date().valueOf() * Math.floor((Math.random()*10)+1),
+                name: "测试 编辑",
+                link: "xxx编辑",
+                icon: "xxx编辑",
+                parentName: "vue"
+              }
+              item.children[0] = obj
+              return {
+                ...item,
+                children: item.children && item.children.length > 0 ? item.children : []
+              }
+            } else {
+              return item
+            }
+          })
+
+          link.value = newArr
+        }
+      },
+      {
+        label: "删除",
+        onClick: () => {
+          link.value.forEach((item,index) => {
+            if (item.id === data.id) {
+              return {
+                ...item,
+                children: item.children && item.children.length > 0 ? item.children.splice(0,1) : []
+              }
+            } else {
+              return item
+            }
+          })
+        }
+      },
+    ]
+  });
+}
+
+// 处理数据和兼容数据
+async function formatData() {
+  let result = await getItem('link')
+  link.value = result && JSON.parse(result).length > 0 ? JSON.parse(result).map((item: LinkNodeType, index: number) => {
+    return {
+      ...item,
+      id: index + new Date().valueOf()
+    }
+  }) : data.map((item, index) => {
+    return {
+      ...item,
+      id: index + new Date().valueOf()
+    }
+  })
+}
+
 onMounted(() => {
-  link.value = getItem('link')&&getItem('link').length>0?getItem('link') : data
+  formatData()
 })
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 .wrapper {
   width: 100%;
   min-width: 260px;

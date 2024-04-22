@@ -11,7 +11,7 @@
 ### 数据存储相关
 
 - [ ] 通过chrome.storage.sync API 进行 Google 帐号数据存储同步
-- [ ] 通过File System 或 chrome.storage.local API 进行本地数据存储
+- [x] 通过File System 或 chrome.storage.local API 进行本地数据存储
 
 ### 数据结构相关
 
@@ -22,6 +22,6 @@
 
 ### 界面功能相关
 
-- [ ] 实现拖拽功能
+- [x] 实现拖拽功能
 - [x] 实现数据搜索功能
 - [ ] 实现数据排序功能
