@@ -1,5 +1,18 @@
 <template>
   <div class="wrapper">
+    <draggable :list="link"
+               ghost-class="ghost"
+               chosen-class="chosenClass"
+               animation="300"
+               @start="onStart"
+               @end="onEnd"
+    >
+      <template #item="{ element }">
+        <div class="item">
+          {{ element }}
+        </div>
+      </template>
+
     <ul class="tree">
       <li class="item-tree" v-for="item in link" :key="item.name">
         <div class="tree-title flex items-center" v-if="item.children && item.children.length > 1"
@@ -27,6 +40,7 @@
         </ul>
       </li>
     </ul>
+    </draggable>
   </div>
 </template>
 
@@ -107,6 +121,16 @@ function handleSearchResult(key: string): LinkNodeType[] {
 function handleJumpLink(data: LinkNodeType): void {
   window.open(data.link)
 }
+
+//拖拽开始的事件
+const onStart = () => {
+  console.log("开始拖拽");
+};
+
+//拖拽结束的事件
+const onEnd = () => {
+  console.log("结束拖拽");
+};
 
 onMounted(() => {
   link.value = data
