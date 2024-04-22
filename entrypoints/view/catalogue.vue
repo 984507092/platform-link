@@ -1,55 +1,67 @@
 <template>
   <div class="wrapper">
-    <draggable :list="link"
-               ghost-class="ghost"
-               chosen-class="chosenClass"
-               animation="300"
-               @start="onStart"
-               @end="onEnd"
-    >
-      <template #item="{ element }">
-        <div class="item">
-          {{ element }}
-        </div>
-      </template>
-
     <ul class="tree">
-      <li class="item-tree" v-for="item in link" :key="item.name">
-        <div class="tree-title flex items-center" v-if="item.children && item.children.length > 1"
-             @click="handleJumpLink(item)">
+      <draggable
+          :list="link"
+          :sort="true"
+          :force-fallback="true"
+          @start="onStart"
+          @end="onEnd"
+      >
+        <template #item="{element }">
+          <ul :class="isOpen?'is_open':''">
+            <!-- <li class="item-tree" v-for="item in link" :key="item.name">-->
+            <li class="item-tree">
+              <div class="tree-title flex items-center" v-if="element.children && element.children.length > 1"
+                   @click="handleJumpLink(element)">
+                <div class="transition">
+                  <SvgIcon :name="element.icon" width="24" height="24"></SvgIcon>
+                </div>
+                <i class="ml-2">{{ element.name }}</i>
+              </div>
 
-          <div class="transition">
-            <SvgIcon :name="item.icon" width="24" height="24"></SvgIcon>
+              <!-- 当只有一个子节点时，直接显示 -->
+              <div v-if="element.children && element.children.length == 1">
+                <div class="first-children items-center" @click="handleJumpLink(element.children[0])">
+                  <SvgIcon :name="element.icon" width="24" height="24"></SvgIcon>
+                  <i class="ml-2"> {{ element.children[0].name }}</i>
+                </div>
+              </div>
 
-          </div>
-          <i class="ml-2">{{ item.name }}</i>
-        </div>
-        <!-- 当只有一个子节点时，直接显示 -->
-        <template v-if="item.children && item.children.length == 1">
-          <div class="first-children items-center" @click="handleJumpLink(item.children[0])">
-            <SvgIcon :name="item.icon" width="24" height="24"></SvgIcon>
-            <i class="ml-2"> {{ item.children[0].name }}</i>
-          </div>
+              <!-- 当有多个子节点时，依旧使用递归组件 -->
+              <ul class="item-tree-children" v-else-if="element.children && element.children.length > 1">
+                <draggable
+                    :list="element.children"
+                    :sort="true"
+                    :force-fallback="true"
+                    @start="onStartChild"
+                    @end="onEndChild"
+                >
+                  <!-- <li class="item-tree-children-child" v-for="child in element.children" :key="child.name" @click="handleJumpLink(child)">-->
+                  <template #item="{element}">
+                    <ul :class="isOpen?'hidden':''">
+                      <li class="item-tree-children-child" @click="handleJumpLink(element)">
+                        <tree-item :node="element"></tree-item>
+                      </li>
+                    </ul>
+                  </template>
+                </draggable>
+              </ul>
+            </li>
+          </ul>
         </template>
-        <!-- 当有多个子节点时，依旧使用递归组件 -->
-        <ul class="item-tree-children" v-else-if="item.children && item.children.length > 1">
-          <li class="item-tree-children-child" v-for="child in item.children" :key="child.name"
-              @click="handleJumpLink(child)">
-            <tree-item :node="child"></tree-item>
-          </li>
-        </ul>
-      </li>
+      </draggable>
     </ul>
-    </draggable>
   </div>
 </template>
 
 <script setup lang="ts">
 import treeItem from '@/components/tree/treeItem.vue'
 import SvgIcon from '@/components/svgIcon/svg.vue'
+import draggable from "vuedraggable";
 import type {LinkNodeType} from '@/types/tree'
-import {flatToTree} from '@/utils'
 import data from "@/config"
+import {getItem,setItem} from "@/utils/storage";
 
 // 输入框传的参数
 const props = withDefaults(defineProps<{
@@ -118,22 +130,38 @@ function handleSearchResult(key: string): LinkNodeType[] {
   return Array.from(filteredData);
 }
 
+// 跳转链接
 function handleJumpLink(data: LinkNodeType): void {
   window.open(data.link)
 }
 
-//拖拽开始的事件
+// 开始拖拽就关闭展开
+const isOpen: Ref<boolean> = ref(false)
+//父级拖拽开始的事件
 const onStart = () => {
-  console.log("开始拖拽");
+  isOpen.value = !isOpen.value
+  console.log('onStart')
 };
 
-//拖拽结束的事件
+//父级拖拽结束的事件
 const onEnd = () => {
-  console.log("结束拖拽");
+  isOpen.value = !isOpen.value
+  setItem('link',link.value)
+  console.log('onEnd')
 };
+
+//子级拖拽开始的事件
+const onStartChild = () => {
+  console.log('startChild')
+}
+//子级拖拽结束的事件
+const onEndChild = () => {
+  setItem('link',link.value)
+  console.log('endChild')
+}
 
 onMounted(() => {
-  link.value = data
+  link.value = getItem('link')&&getItem('link').length>0?getItem('link') : data
 })
 </script>
 
@@ -149,40 +177,47 @@ onMounted(() => {
   list-style-type: none;
   box-sizing: border-box;
   padding: 10px;
+}
 
-  .item-tree {
-    width: 100%;
-    margin-bottom: 10px;
+.is_open {
+  width: 100%;
+  height: 40px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+
+.item-tree {
+  width: 100%;
+  margin-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  cursor: pointer;
+  border-bottom: 1px solid #eeeeee;
+
+  .tree-title {
     display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
-    cursor: pointer;
-    border-bottom: 1px solid #eeeeee;
-
-    .tree-title {
-      display: flex;
-      align-items: center;
-      justify-content: flex-start;
-      padding: 5px;
-    }
-
-    .first-children {
-      width: calc(100% - 10px);
-      height: 40px;
-      line-height: 40px;
-      display: flex;
-      box-sizing: content-box;
-      padding: 5px;
-    }
+    align-items: center;
+    justify-content: flex-start;
+    padding: 5px;
   }
 
-
-  .item-tree:last-child {
-    border-bottom: none;
-    margin-bottom: 0;
+  .first-children {
+    width: calc(100% - 10px);
+    height: 40px;
+    line-height: 40px;
+    display: flex;
+    box-sizing: content-box;
+    padding: 5px;
   }
 }
+
+.item-tree:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
 
 .item-tree-children {
   width: calc(100% - 20px);
@@ -204,7 +239,7 @@ onMounted(() => {
 .item-tree-children .item-tree-children-child:hover {
   color: skyblue;
   transition: all 0.3s;
-  -webkit-transition:all .5s ease;
+  -webkit-transition: all .5s ease;
   border-radius: 8px;
   background-color: #cccccc0f;
   box-sizing: content-box;
