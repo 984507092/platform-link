@@ -46,8 +46,7 @@ const props = withDefaults(defineProps<{
   form: FormData
 }>(), {
   showDialog: false,
-  title: true,
-  form: {}
+  title: true
 })
 
 

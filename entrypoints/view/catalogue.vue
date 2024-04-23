@@ -1,19 +1,13 @@
 <template>
   <div class="wrapper">
     <ul class="tree">
-      <draggable
-          :force-fallback="true"
-          :list="link"
-          :sort="true"
-          @end="onEnd"
-          @start="onStart"
-      >
+      <draggable item-key="drag-base" tag="li" :force-fallback="true" :list="link" :sort="true" @end="onEnd" @start="onStart">
         <template #item="{ element }">
-          <ul :class="isOpen?'is_open':''" @contextmenu="onContextMenu($event,element)">
+          <ul :class="isOpen ? 'is_open' : ''" @contextmenu="onContextMenu($event, element)" :key="element.link">
             <!-- <li class="item-tree" v-for="item in link" :key="item.name">-->
             <li class="item-tree">
-              <div v-if="element.children && element.children.length > 1" class="tree-title flex items-center"
-                   @click="handleJumpLink(element)">
+              <div v-if="element.children && element.children.length > 1" class="tree-title flex items-center" :key="element.link"
+                @click="handleJumpLink(element)">
                 <div class="transition">
                   <SvgIcon :name="element.icon" height="24" width="24"></SvgIcon>
                 </div>
@@ -21,7 +15,7 @@
               </div>
 
               <!-- 当只有一个子节点时，直接显示 -->
-              <div v-if="element.children && element.children.length == 1">
+              <div v-if="element.children && element.children.length == 1" :key="element.link">
                 <div class="first-children items-center" @click="handleJumpLink(element.children[0])">
                   <SvgIcon :name="element.icon" height="24" width="24"></SvgIcon>
                   <i class="ml-2"> {{ element.children[0].name }}</i>
@@ -29,24 +23,16 @@
               </div>
 
               <!-- 当有多个子节点时，依旧使用递归组件 -->
-              <ul v-else-if="element.children && element.children.length > 1" class="item-tree-children">
-                <draggable
-                    :force-fallback="true"
-                    :list="element.children"
-                    :sort="true"
-                    @end="onEndChild"
-                    @start="onStartChild"
-                >
+              <li v-else-if="element.children && element.children.length > 1" class="item-tree-children">
+                <draggable :item-key="`drag-${element.name}`" tag="ul" :class="isOpen ? 'hidden' : ''":force-fallback="true" :list="element.children" :sort="true" @end="onEndChild" @start="onStartChild">
                   <!-- <li class="item-tree-children-child" v-for="child in element.children" :key="child.name" @click="handleJumpLink(child)">-->
-                  <template #item="{element}">
-                    <ul :class="isOpen?'hidden':''">
-                      <li class="item-tree-children-child" @click="handleJumpLink(element)">
-                        <tree-item :node="element"></tree-item>
-                      </li>
-                    </ul>
+                  <template #item="{ element }">
+                    <li class="item-tree-children-child" @click="handleJumpLink(element)" :key="element.link">
+                      <tree-item :node="element"></tree-item>
+                    </li>
                   </template>
                 </draggable>
-              </ul>
+              </li>
             </li>
           </ul>
         </template>
@@ -60,9 +46,9 @@
 <script lang="ts" setup>
 import treeItem from '@/components/tree/treeItem.vue'
 import SvgIcon from '@/components/svgIcon/svg.vue'
-import type {LinkNodeType} from '@/types/tree'
+import type { LinkNodeType } from '@/types/tree'
 import data from "@/config"
-import {getItem, setItem} from "@/utils/storage"; // 存储
+import { getItem, setItem } from "@/utils/storage"; // 存储
 import draggable from "vuedraggable"; // 拖拽
 import ContextMenu from '@imengyu/vue3-context-menu' // 右键菜单
 import Dialog from "@/components/dialog/dialog.vue"
@@ -327,5 +313,4 @@ onMounted(() => {
   background-color: #cccccc0f;
   box-sizing: content-box;
 }
-
 </style>
