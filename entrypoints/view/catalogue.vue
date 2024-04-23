@@ -53,16 +53,20 @@
       </draggable>
     </ul>
   </div>
+
+  <Dialog :form="newArr" :title="title" :showDialog="isShowDialog" @close="close" @confirm="confirm"></Dialog>
 </template>
 
 <script lang="ts" setup>
 import treeItem from '@/components/tree/treeItem.vue'
 import SvgIcon from '@/components/svgIcon/svg.vue'
-import draggable from "vuedraggable";
 import type {LinkNodeType} from '@/types/tree'
 import data from "@/config"
-import {getItem, setItem} from "@/utils/storage";
-import ContextMenu from '@imengyu/vue3-context-menu'
+import {getItem, setItem} from "@/utils/storage"; // 存储
+import draggable from "vuedraggable"; // 拖拽
+import ContextMenu from '@imengyu/vue3-context-menu' // 右键菜单
+import Dialog from "@/components/dialog/dialog.vue"
+
 
 // 输入框传的参数
 const props = withDefaults(defineProps<{
@@ -162,6 +166,20 @@ const onEndChild = () => {
 }
 
 
+// 弹窗
+let isShowDialog: Ref<boolean> = ref(false)
+let title: Ref<boolean> = ref(true)
+
+// 确认
+function confirm(data: LinkNodeType) {
+  isShowDialog.value = false
+}
+
+// 取消
+function close() {
+  isShowDialog.value = false
+}
+
 // 右键新增 编辑 删除
 function onContextMenu(e: MouseEvent, data: LinkNodeType) {
   //prevent the browser's default menu
@@ -171,72 +189,26 @@ function onContextMenu(e: MouseEvent, data: LinkNodeType) {
     x: e.x,
     y: e.y,
     theme: 'mac dark',
-    checked:true,
+    checked: true,
     items: [
       {
         label: "新增",
         onClick: () => {
-        let newArr = link.value.map((item) => {
-            if (item.id === data.id) {
-              let obj: LinkNodeType = {
-                id: new Date().valueOf() * Math.floor((Math.random()*10)+1),
-                name: "测试新增",
-                link: "xxx",
-                icon: "xxx",
-                parentName: "vue",
-                children:[]
-              }
-              item.children&&item.children.unshift(obj)
-              return {
-                ...item,
-                children: item.children && item.children.length > 0 ? item.children : []
-              }
-            } else {
-              return item
-            }
-          })
-          console.log(newArr,'1515')
-          link.value = newArr
+          isShowDialog.value = true
+          title.value = true
         }
       },
       {
         label: "编辑",
         onClick: () => {
-         let newArr = link.value.map((item) => {
-            if (item.id === data.id) {
-              let obj: LinkNodeType = {
-                id: new Date().valueOf() * Math.floor((Math.random()*10)+1),
-                name: "测试 编辑",
-                link: "xxx编辑",
-                icon: "xxx编辑",
-                parentName: "vue"
-              }
-              item.children[0] = obj
-              return {
-                ...item,
-                children: item.children && item.children.length > 0 ? item.children : []
-              }
-            } else {
-              return item
-            }
-          })
-
-          link.value = newArr
+          isShowDialog.value = true
+          title.value = false
         }
       },
       {
         label: "删除",
         onClick: () => {
-          link.value.forEach((item,index) => {
-            if (item.id === data.id) {
-              return {
-                ...item,
-                children: item.children && item.children.length > 0 ? item.children.splice(0,1) : []
-              }
-            } else {
-              return item
-            }
-          })
+
         }
       },
     ]
@@ -249,12 +221,24 @@ async function formatData() {
   link.value = result && JSON.parse(result).length > 0 ? JSON.parse(result).map((item: LinkNodeType, index: number) => {
     return {
       ...item,
-      id: index + new Date().valueOf()
+      id: index + new Date().valueOf(),
+      children: item.children && item.children.length > 0 ? item.children.map((i, index) => {
+        return {
+          ...i,
+          id: new Date().valueOf() * Math.random() * 10
+        }
+      }) : []
     }
   }) : data.map((item, index) => {
     return {
       ...item,
-      id: index + new Date().valueOf()
+      id: index + new Date().valueOf(),
+      children: item.children && item.children.length > 0 ? item.children.map((i, index) => {
+        return {
+          ...i,
+          id: new Date().valueOf() * Math.random() * 10
+        }
+      }) : []
     }
   })
 }

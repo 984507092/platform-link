@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@imengyu/vue3-context-menu": "^1.4.1",
+    "element-plus": "^2.7.1",
     "vue": "^3.4.0",
     "vuedraggable": "^4.1.0"
   },
@@ -26,6 +27,7 @@
     "typescript": "^5.3.3",
     "unocss": "^0.58.6",
     "unplugin-auto-import": "^0.17.5",
+    "unplugin-vue-components": "^0.26.0",
     "vite-plugin-svg-icons": "^2.0.1",
     "vue-tsc": "^2.0.6",
     "wxt": "^0.17.0"
