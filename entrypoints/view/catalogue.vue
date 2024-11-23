@@ -53,7 +53,6 @@ import draggable from "vuedraggable"; // 拖拽
 import ContextMenu from '@imengyu/vue3-context-menu' // 右键菜单
 import Dialog from "@/components/dialog/dialog.vue"
 
-
 // 输入框传的参数
 const props = withDefaults(defineProps<{
   search: string
@@ -93,6 +92,7 @@ function handleSearchResult(key: string): LinkNodeType[] {
 
   // 遍历每个项目
   data.forEach(item => {
+      console.log("🚀 ~ handleSearchResult ~ item:", item)
     // 去除当前项目的 name 中的空格
     const itemNameWithoutSpace = item.name.replace(/\s+/g, '');
 
@@ -116,6 +116,7 @@ function handleSearchResult(key: string): LinkNodeType[] {
       });
     }
   });
+
 
   // 将 Set 转换为数组并返回
   return Array.from(filteredData);
